@@ -1,0 +1,163 @@
+<html lang="en">
+<%- include("../partials/head.ejs") %>
+
+<body>
+   <%- include("../partials/nav.ejs") %>
+
+   <section class=".bg-light.bg-gradient text-dark p-5 text-center text-sm-start justify-content-center" style="background-color: #f7e7ce">
+        <div class="container">
+
+            <div class="modal-dialog  p-5">
+
+      
+                <div class="modal-content bg-light" style="border-radius: 40px;">
+
+                    <div class="modal-header p-5" >
+                        <a href="/report" class="btn-close" ></a>
+                      
+                    </div>
+                    
+                    <div class="modal-content p-5">
+                        <br>
+                        <div class="row row-centered pos" >
+                            
+                            <div class="col-md-12 text-center">
+                             <h1 style="font-family: 'Press Start 2P', cursive;"><%= log.name %></h1>
+                             <h2 ><%= log.createdAt %></h2>
+                            
+
+                             <p>total screen usage for this log is: <span id="total"></span> minutes</p>
+                             <p>the average screen time for this log was: <span id="average"></span> minutes</p>
+
+                              <div id="barChart" class="chart"></div>
+                                <hr>
+                              <div id="piechart" class="chart"></div>
+                              
+                              
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="modal-footer p-5">
+                        <div class="buttonElement">
+                            <a class=" btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">delete</a> 
+                            <a class=" btn btn-primary" href="/report">return</a> 
+                            
+                        </div>
+                    </div>
+
+                
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+<!--delete modal-->
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Are you sure you want to delete?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <p>Once deleted the data will be lost <span style="color: #d9534f;">FOREVER</span>, are you sure you wish to continue?</p>
+            </div>
+
+            <div class="modal-footer">
+                <div class="buttonElement">
+                    <a class="delete btn btn-danger" data-doc="<%= log._id %>">delete</a> <!--custom data attribute-->
+                    <button class="btn btn-primary" data-bs-dismiss="modal">close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <%- include("../partials/footer.ejs") %>
+    <script>    
+        const trash = document.querySelector('a.delete');   //get reference of button (class = delete)
+        trash.addEventListener('click', (e) => {    //eventlistener detects when button is clicked
+            const endpoint = `/logs/${trash.dataset.doc}`;  ///send delete request to /logs/id    (id = data-doc = dataset.doc)
+
+            fetch(endpoint, {   
+                method: 'DELETE' //send delete request to endpoint ( /logs/id( id = data-doc))
+            }) 
+            .then((response) => response.json())    //get json response for controller put it in js object called data so it can be used.
+            .then((data) => window.location.href = data.redirect) //redirect from frontend (data.redirect = controller redirect. /report)
+            .catch(err => console.log(err));
+        })
+
+        //total = sum of all log details
+        total = <%= log.education %> + <%= log.shopping %> +  <%= log.browsing %> + <%= log.social %>;
+        average = total / 4;
+
+        education =  <%= log.education %>;
+        shopping =  <%= log.shopping %>;
+        browsing =  <%= log.browsing %>;
+        social =  <%= log.social %>;
+
+        //set text with specified id
+       document.getElementById("total").innerHTML = total;
+       document.getElementById("average").innerHTML  = average;
+
+        //load google charts
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawBasic);
+
+      //draw piechart and set values
+      function drawBasic() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Category', 'Average','total' ],
+            ['Usage(mins)', average, total],
+        ]);
+
+        var options = {
+            bar: { groupWidth: '25%' },
+            legend:'bottom',
+            backgroundColor: '#fafafa',
+            colors: ['#5cb85c', '#0275d8']
+           
+        };
+
+        //display chart in div with id of 'stackedbar'
+            var chart = new google.visualization.BarChart(document.getElementById('barChart'));
+            chart.draw(data, options);
+
+
+
+        var data = google.visualization.arrayToDataTable([
+          ['Screen Time', 'Minutes'],
+          ['education',   education],
+          ['shopping',     shopping],
+          ['browsing',     browsing],
+          ['social',     social],
+        ]);
+        //specific customization options
+        var options = {
+          is3D: true,
+          colors: ['#5cb85c', '#0275d8', '#f0ad4e', '#d9534f'],
+          legend:'bottom',
+          backgroundColor: '#fafafa',
+         
+        };
+        //display chart in div with id of 'piechart'
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+      }
+      //whenever window is resized call the draw function again.
+      $(window).resize(function() {
+            drawBasic();
+      })
+    </script> 
+
+</body>
+</html>

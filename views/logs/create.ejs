@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %> 
+<body>
+    <%- include('../partials/nav.ejs') %> 
+
+    <section class="pie_chart_content p-5" style="background-color: #f7e7ce">
+        <div class="p-5">
+            <div class="container p-3">
+                    <div class="modal-dialog p-5">
+                        <form action="/logs" method="POST">
+                            <div class="modal-content">
+
+                                <div class="modal-header p-3">
+                                    <a href="/report" class="btn-close" ></a>
+                                </div>
+                                <div class="modal-body p-2">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id="container "class="main_box" style="width: 100%; height : 80vh">
+                                                <canvas id="mychart"></canvas>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <h2 class="p-2"x><span style="color: #0275d8">Create</span> <span style="color: #d9534f">New</span> <span style="color: #f0ad4e">Log</span></h3>
+                                                 <hr>
+                                                    <div >
+                                                        <label for="name" >Name:</label>
+                                                         <input type="text" id="name" name="name" class="form-control" placeholder="Name"required class="nameInput">
+                                                    </div>
+                                                    <br>
+
+                                                 <div class="form-group">
+                                                     <label for="piechart-input">Education</label>
+                                                    <input type="number"  id="education" name="education" class="education-input form-control" required class="formInput" placeholder="Minutes of Use">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piechart-input">shopping</label>
+                                                    <input type="number" id="shopping" name="shopping" class="shopping-input form-control" required class="formInput" placeholder="Minutes of Use">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piechart-input">browsing</label>
+                                                    <input type="number" id="browsing" name="browsing" class="browsing-input form-control" required class="formInput" placeholder="Minutes of Use">
+                                                </div>
+
+                                                    <div class="form-group">
+                                                    <label for="piechart-input">Social Media</label>
+                                                    <input type="number" id="social" name="social" class="social-media-input form-control" required class="formInput" placeholder="Minutes of Use">
+                                                </div>
+                                </div>
+                                        <div class="modal-footer p-1">
+                                            <div class="buttonElement">
+                                                <button class="btn btn-success">Submit</button>
+                                                <a class="btn btn-primary" href="/report">cancel</a> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            </div>
+        </div>
+
+    </section>
+<script>
+
+    //get input fields
+    const education = document.querySelector('.education-input');
+    const shopping = document.querySelector('.shopping-input');
+    const browsing = document.querySelector('.browsing-input');
+    const socialMedia = document.querySelector('.social-media-input');
+
+
+    //draw chart
+    const ctx = document.getElementById('mychart').getContext('2d');
+    let mychart = new Chart(ctx, {
+
+        type: 'pie',
+        options: {
+            // alter whenever window resizes
+            responsive: true,
+            maintainAspectRatio: false,
+        },
+
+        data: {
+
+            labels: ['Education', 'shopping', 'browsing', 'Social Media'],
+            
+            datasets : [
+                {
+                    label:'minutes',
+                    data: [0,0,0,0], // inital chart details [education , shopping, browsing, socialMedia] = 0
+                    backgroundColor:['#5cb85c', '#0275d8', '#f0ad4e', '#d9534f'],
+                    borderWidth:1,
+                }
+            ],
+        }
+    });
+
+    const updateChartValue = (input, dataOrder) => { //every time an inuot field is changed update chart
+        input.addEventListener ('change', e => { // eventlistener for when input field is changed
+            mychart.data.datasets[0].data[dataOrder] = e.target.value; //  which ever field changes (0-3) = target value
+            mychart.update();   //update corresponding chart detail
+        });
+    };
+
+    updateChartValue(education,0);  //  call listening function for 0 (education)
+    updateChartValue(shopping, 1);  //  call listening function for 2 (shopping)
+    updateChartValue(browsing, 2);  //  call listening function for 3 (browsing)
+    updateChartValue(socialMedia, 3); //  call listening function for 4 (socialMedia)
+</script>
+</body>
+</html>

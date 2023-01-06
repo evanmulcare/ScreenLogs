@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../partials/head.ejs') %> 
+<body>
+
+    <%- include('../partials/nav.ejs') %> 
+    <section class="pie_chart_content p-5" style="background-color: #f7e7ce">
+        <div class="p-5">
+
+            <div class="container p-3">
+                    <div class="modal-dialog p-5">
+                        <form action="/modify/<%= log._id %>" method="post">
+                            <div class="modal-content">
+
+                                <div class="modal-header p-3">
+                                    <a href="/report" class="btn-close" ></a>
+                                </div>
+
+
+                                <div class="modal-body p-2">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id="container "class="main_box" style="width: 100%; height: 80vh;">
+                                                <canvas id="mychart"></canvas>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <h2 class="p-2"><span style="color: #0275d8">Update</span> <span style="color: #d9534f">Log</span> <span style="color: #f0ad4e">Details</span></h3>
+                                                 <hr>
+                                                    <div>
+                                                        <h5 style="font-family: 'Press Start 2P', cursive;"><%= log.name %> - <%= log.createdAt %></h5>
+                                                    </div>
+                                                    <br>
+
+                                                 <div class="form-group">
+                                                     <label for="piechart-input">Education</label>
+                                                    <input type="number"  id="education" name="education" class="education-input form-control" required class="formInput" value="<%= log.education %>" placeholder=" Past input was <%= log.education %>">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piechart-input">shopping</label>
+                                                    <input type="number" id="shopping" name="shopping" class="shopping-input form-control" required class="formInput" value="<%= log.shopping %>" placeholder=" Past input was <%= log.shopping %>">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piechart-input">browsing</label>
+                                                    <input type="number" id="browsing" name="browsing" class="browsing-input form-control" required class="formInput" value="<%= log.browsing %>" placeholder=" Past input was <%= log.browsing %>">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="piechart-input">Social Media</label>
+                                                    <input type="number" id="social" name="social" class="social-media-input form-control" required class="formInput" value="<%= log.social %>" placeholder=" Past input was <%= log.social %>">
+                                                </div>
+                               
+                                            <div class="modal-footer p-3">
+                                                <div class="buttonElement">
+                                                    <a class=" btn btn-success" data-bs-toggle="modal" data-bs-target="#modify-modal">Submit</a> 
+                                                    <a class="btn btn-primary" href="/report">cancel</a> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                
+                                    
+                                </div>
+                            </div> 
+                        </div>
+                        <!--modify modal-->
+                            <div class="modal fade" id="modify-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+            
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modal-title">Confirm modifications?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                            </button>
+            
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Once submitted the past data will be lost <span style="color: #d9534f;">FOREVER</span>, are you sure you wish to continue with data modifications?</p>
+                                        </div>
+            
+                                        <div class="modal-footer">
+                                            <div class="buttonElement">
+                                                <button class="btn btn-success">Submit</button>
+                                            </form>
+                                                <a class="btn btn-primary" data-bs-dismiss="modal">close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+<script>
+    //get input fields
+    const education = document.querySelector('.education-input');
+    const shopping = document.querySelector('.shopping-input');
+    const browsing = document.querySelector('.browsing-input');
+    const socialMedia = document.querySelector('.social-media-input');
+
+    // total = sum of all log values
+    total = <%= log.education %> + <%= log.shopping %> +  <%= log.browsing %> + <%= log.social %>;
+    educationPastTotal =  <%= log.education %>;
+    shoppingPastTotal =  <%= log.shopping %>;
+    browsingPastTotal =  <%= log.browsing %>;
+    socialPastTotal =  <%= log.social %>;
+
+    const ctx = document.getElementById('mychart').getContext('2d');
+    let mychart = new Chart(ctx, {
+        
+        type: 'bar', //set chart type to bar chart
+
+        options: {
+            // alter whenever window resizes
+            responsive: true,   
+            maintainAspectRatio: false,
+        },
+
+        data: {
+
+            labels: ['Education', 'shopping', 'browsing', 'Social Media'],
+            
+            datasets : [
+                {
+                    label:'minutes',
+                    data: [educationPastTotal,shoppingPastTotal,browsingPastTotal,socialPastTotal], // chart data initially  = past log details
+                    backgroundColor:['#5cb85c', '#0275d8', '#f0ad4e', '#d9534f'],
+                    borderWidth:1,
+   
+                }
+            ],
+        }
+    });
+
+    const updateChartValue = (input, dataOrder) => { //every time an inuot field is changed update chart
+        input.addEventListener ('change', e => {    // eventlistener for when input field is changed
+            mychart.data.datasets[0].data[dataOrder] = e.target.value;  ///  which ever field changes (0-3) = target value
+            mychart.update();   //update corresponding chart detail
+        });
+    };
+  
+    updateChartValue(education,0);  //  call listening function for 0 (education)
+    updateChartValue(shopping, 1); //  call listening function for 2 (shopping)
+    updateChartValue(browsing, 2);   //  call listening function for 3 (browsing)
+    updateChartValue(socialMedia, 3);    //  call listening function for 4 (socialMedia)
+</script>
+    
+</body>
+</html>

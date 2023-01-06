@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %> 
+<body>
+
+    <%- include('./partials/nav.ejs') %> 
+    <div class = "appContent">
+<!-- LANDING SECTION-->
+        <section class="landing bg-white text-dark p-5 text-center text-sm-start">
+            <div class="container">
+                <div class="d-sm-flex align-items-center justify-content-between">
+                    <div>
+                        <h1><span style="color: #0275d8">Daily</span> <span style="color: #d9534f">Screen</span> <span style="color: #f0ad4e">Time</span></h1>
+                        <p class="lead">
+                            Helping you to track
+                           Your daily Screen Usage.
+                        </p>
+                        <a class="btn btn-success" href="/create">Create log</a> 
+              
+                    </div>
+                  <img class="img-fluid w-50 d-none d-sm-block" src="images/video2.gif" alt=""> 
+                </div>
+            </div>
+        </section>
+        
+        
+        
+<!--SEARCH BAR SECTION-->
+<section class="bg-success text-light p-2 ">
+    <div class="container">
+        <div class="d-md-flex justify-content-between 
+        align-items-center ">
+
+            <div class="input-group user-input">
+                <input
+                    type="text"
+                    id="search"
+                    class="form-control"
+                    placeholder="Search For User"
+                />
+            </div>
+        </div>
+    </div>
+</section>
+<!-- USER TABLE-->
+        <section class="p-5 bg-success">
+            <script>var stack =[];</script>
+            <% if(logs.length > 0) { %>
+                <div class="container">
+                    <div class="table-responsive hover-div">
+                        <div class="table-wrapper-scroll-y my-scrollbar" >
+                            <table class="table table-striped table-hover " id="myTable">
+                                <thead>
+                                    <tr class="header">
+                                        <th>Name</th>
+                                        <th>Education</th>
+                                        <th>Shopping</th>
+                                        <th>Browsing</th>
+                                        <th >Social</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                
+                                    <% logs.forEach(log => { %>
+                                        <script>
+                                        total = <%= log.education %> + <%= log.shopping %> +  <%= log.browsing %> + <%= log.social %>; //set the total for the log
+                                        obj =  {'<%= log.name %>': total}; // obj = key/value of log name and total
+                                        stack.push(obj); // append obj to array stack
+                                       
+                                        </script>
+                                    <tr>
+                                        <a class="logView "> 
+                                            <td><%= log.name %> </td> 
+                                            <td><%= log.education %> </td>
+                                            <td><%= log.shopping %></td>
+                                            <td><%= log.browsing %> </td> 
+                                            <td><%= log.social %></td>
+                                            <td><%= log.createdAt %></td> 
+                                            <td>
+                                            <div class="h4">
+                                                    <a href='/modify/ <%= log._id%>' class="edit" data-toggle="tooltip" title="modify log"><i class="bi bi-pen"></i></a>
+                                                    <a href="/logs/ <%=log._id%>" class="delete" data-toggle="tooltip" title="more info/delete"><i class="bi bi-info-square"></i></a>
+                                                </div>
+                                            </td>          
+                                        </a>
+                                    </tr>
+                                    <% }) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>        
+                </div>
+        </section>
+    <!--CHART SECTION-->
+
+        <section class="p-5 bg-dark text-light  align-items-center">
+            <h3 class="text-center" style="color: #5cb85c; font-family: 'Press Start 2P', cursive;">
+                Chart Representation of Data</h3>
+                <br>
+                <div id="container" class="col-md" style="width: 100%; height: 80vh">
+                    <canvas id="mychart"></canvas>
+                </div>
+                
+        </section>
+                
+                <%  } else { %>
+                    <p>there has been no logs made yet...You should be the first!! <a href="/create">create</a>.</p>
+                <% } %>
+       
+
+
+<!--Information sections-->
+
+<section id="learn" class="p-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-md">
+                <img src="images/section2Image.jpg" class="img-fluid" alt="">
+            </div>
+            <div class="col-md p-5">
+                <h2 style="color: #f0ad4e">About Us</h2>
+                <p class="lead">
+                    This is a website for logging Screen time through logs.
+                    a user can create a log and define their name. and amount of time spend
+                    on screen usage during a particular day.
+                </p>
+                <p>
+                    The main types of usage logged is: 1. Education, 2.Shoppping, 3.Browsing and 4. Social media.
+                    this data can be created, searched through, modified and deleted.
+                </p>
+                <a href="/about" class="btn btn-dark mt-3">
+                    <i class="bi bi-chevron-right"></i> Read More
+                </a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section id="learn" class="p-5">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+           
+            <div class="col-md p-5">
+                <h2 style="color: #d9534f">Why Track Screen Usage</h2>
+                <p class="lead">
+                    Screen time is the amount of time spent using a device with a screen such as a smartphone, computer, television, or 
+                    video game console. 
+                    The concept is under significant research with related concepts in digital media use and mental health.
+                </p>
+                <p>
+                   Types of Usage: 
+                   Passive consumption: watching TV, reading, and listening to music.
+                    Interactive consumption: playing games and browsing the Internet.
+                    Communication: video-chatting and using social media.
+                     ​Content creation: using devices to make digital art or music.
+
+                    </p>
+
+                <a href="/about" class="btn btn-dark mt-3">
+                    <i class="bi bi-chevron-right"></i> Read More
+                </a>
+            </div>
+            <div class="col-md">
+                <img src="images/section1Image.jpg" class="img-fluid" alt="">
+                  </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+        <%- include('./partials/questions.ejs') %> 
+        <%- include('./partials/footer.ejs') %> 
+
+
+<!--JS FOR SEARCH + DOUGHNUT CHARTJS-->
+        <script>   
+        //JQuery Function for search
+            $(document).ready(function() {
+            
+                    //filter table rows
+                    $("#search").on("keyup", function() {   //id search on search bar input
+                        var term = $(this).val().toLowerCase(); //store searchbar input as lowercase
+                        $("table tbody tr").each(function(){    //for every row in table    
+                            $row = $(this);
+                            var name = $row.find("td").text().toLowerCase();    // table data name matches keyboard input
+            
+                            if(name.search(term) < 0)
+                            {
+                                $row.hide();    //if no letters in name matches the table data hide that row
+                            }
+                            else
+                            {
+                                $row.show();    //show row if letters match
+                            }
+                        });
+                    });
+                });
+            
+                //Doughnut chart implementation
+                    const colors = ['#5cb85c', '#0275d8', '#f0ad4e', '#d9534f']
+            
+                    var chdata = {
+                        label: 'Total Usage',
+                        datasets: [],
+                        
+                    };
+                    //append  Name and total score to chart dataset
+                    for (var i = 0; i< stack.length; i++) {
+            
+                        chdata.datasets.push(
+                            {
+                                // for every value in stack array add the key(Name) and value(total score) + plus a color from color array
+                                label: Object.keys(stack[i]),
+                                data: Object.values(stack[i]),
+                                backgroundColor: colors[i % colors.length]
+                            }
+                        ) 
+                        
+                    }
+            
+                    //draw doughnut chart
+                    const ctx = document.getElementById('mychart').getContext('2d');
+                    let mychart = new Chart(ctx, {
+                        
+                        type: 'doughnut',
+            
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                        },
+                        data: chdata //set data of chart to key/values of stack array
+                    })
+                    </script>
+                    
+</body>
+</html>

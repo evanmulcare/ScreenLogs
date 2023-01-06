@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/head.ejs') %> 
+<body style="background-color: #f7e7ce">
+
+    <div class="container">
+        
+    <div class="d-flex justify-content-between">
+        <div class="w-50 ml-0 mr-0 mx-auto text-center p-2">
+            
+            <div class="move d-none d-lg-block ">
+                <div class="phone"></div>
+                <div class="screen">
+                    <div>
+                        <div class="d-flex justify-content-between"> <p><i class="bi bi-lock"></i></p> <p>11:11</p> <p><i class="bi bi-reception-4"></i><i class="bi bi-wifi"></i><i class="bi bi-battery"></i></p> </div>
+                        <br><br><br>
+                        <div class="text-dark"><h1>Hello</h1></div>
+                        <div class="text-dark"><h5>welcome to screen logs,</h5></div>
+                        <br><br>
+                        <div class="app bg-warning hover-div"><a href="/report" class="text-decoration-none text-light"><h3>Home</h3></a></div>
+                        <div class="app bg-danger hover-div"><a href="/create" class="text-decoration-none text-light"><h3>Create</h3></a></div>
+                        <div class="app bg-primary  hover-div"><a href="/about" class="text-decoration-none text-light"><h3>About</h3></a></div>
+                        <div class="app bg-success hover-div"><a href="/help" class="text-decoration-none text-light"><h3>Help</h3></a></div>
+                    </div>
+                </div>
+                <div class="home"></div>
+                
+            </div>
+    </div>
+    <div class="p-5">
+        <h2  style="font-family: 'Press Start 2P', cursive;" >Screen Logs</h2>
+        <p>Welcome to Screen Logs. Our goal is is to help users track time on screen usage.</p>
+            <br><br>
+        <p>
+            See our phone? you can navigate the website through it! interact with it to begin...
+        </p>
+        <p>p.s. mobile users can use <a href="/report">this link</a> instead!</p>
+    </div>
+    </div>
+    
+
+<script>
+    var move = document.querySelector('.move'); // get move div
+
+    move.addEventListener('mousedown', mousedown); // listen for when click occures on move div
+
+    function mousedown(){
+        move.addEventListener('mousemove', mousemove); // listen for if mouse moves while mouse is clicked
+        move.addEventListener('mouseup', mouseup); // listen for when mouse is unclicked
+        this.style.background = 'black'; // set div background to black
+
+        function mousemove(e){
+            var x = e.clientX - 200 + 'px'; // gets horizontoal position of mouse
+            var y = e.clientY - 200 + 'px'; //gets vertical position of mouse
+            this.style.left = x; // set x position of div to mouse position
+            this.style.top = y; // set y position of div to mouse position
+        } 
+
+        function mouseup(){
+            move.removeEventListener('mousemove', mousemove); // removes the mouse down function
+            this.style.background = 'white'; // sets background div back to white
+        }
+    }
+</script>
+</body>
+</html> 

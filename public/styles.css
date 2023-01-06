@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Import google font*/
+
+body{
+    height: 100%;
+    background-color: #f7e7ce;
+}
+/* Database table scroll*/
+.my-scrollbar 
+{
+    height: 300px; /* set height of table*/
+}
+
+/* landing section for report page*/
+.landing {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    min-height: 100vh;
+}
+
+/* google chart*/
+.chart {
+    width: 100%; 
+    min-height: 500px;
+  }
+
+/* set values for chart container in modify and create*/
+.pie_chart_content {
+    height: 1100px;
+
+}
+
+.pie_chart_content .container {
+    background-color: #fafafa;
+    border-radius: 40px;
+    padding: 0px;
+}
+
+
+/* hover effect */
+
+.hover-div {
+    background: #f8f8f8;
+    transition: all 0.3s; /*make transition take place over 0.3 seconds*/
+}
+
+.hover-div:hover { /* change div once hovered over*/
+    transform: translateY(-20px); /* Move 20px of y axis */
+    box-shadow: 0 22px 43px rgba(0, 0, 0, 0.5);  /*  set box shadow when hovered*/
+    cursor: pointer; /* chage cursor */
+    border-radius: 5px; /* round corners of div*/
+}
+
+
+/* move effect for homescreen phone*/
+.move {
+    width: 360px;
+    height: 650px;
+    cursor: pointer;
+    position: fixed;
+    border-radius: 60px;
+
+}
+
+/* Homescreen phone divs */
+
+.phone {
+    width: 360px;
+    height: 650px;
+    background: #f9f7f9;
+    border: 5px solid #000000;
+    border-radius: 45px;
+    opacity: 0.9;
+  }
+
+  .screen {
+    width: 326px;
+    height: 500px;
+    border: 5px solid #000000;
+    border-radius: 5px;
+    position: relative;
+    left: 18px;
+    top: -600px;
+    background: #fff;
+  }  
+  
+  .home {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    position: relative;
+    top: -590px;
+    left: 145px;
+    background: #000000;
+ 
+  }
+
+  .app {
+    border-radius: 80px;
+  }
+
