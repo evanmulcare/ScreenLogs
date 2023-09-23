@@ -9,7 +9,7 @@ const logRoutes = require('./routes/logRoutes');
 const app = express();
 
 // MongoDB URI from environment variables
-const URI = process.env.DATABASE_URL;
+const URI = "mongodb+srv://root:root@cluster0.ntehv8k.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.set('strictQuery', false);
 
