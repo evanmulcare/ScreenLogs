@@ -19,12 +19,15 @@ mongoose.connect(URI)
 //viewengine
 app.set('view engine', 'ejs');
 
-
 //middleware
+// This middleware serves static files from the 'public' directory, allowing them to be accessed by clients.
 app.use(express.static('public'));
-app.use(morgan('dev'));
-app.use(express.urlencoded());
 
+// This middleware logs incoming requests to the console in the 'dev' format, providing useful information such as request method, status, and response time.
+app.use(morgan('dev'));
+
+// This middleware parses incoming URL-encoded form data and populates the req.body object with the parsed data, making it easier to handle form submissions.
+app.use(express.urlencoded())
 
 //non log routes
 app.get('/', (req, res) => {
