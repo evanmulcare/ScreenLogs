@@ -5,15 +5,28 @@ const mongoose = require('mongoose');
 const { render } = require('ejs');
 const logRoutes = require('./routes/logRoutes'); 
 
-//express app
+// Express app
 const app = express();
 
-//mongo
-const URI = process.env.DATABASE_URL
-mongoose.connect(URI)
-    //listen
-    .then((result) =>app.listen(3000))
-    .catch((err) => console.log(err)); 
+// MongoDB URI from environment variables
+const URI = process.env.DATABASE_URL;
+
+mongoose.set('strictQuery', false);
+
+// Connect to MongoDB
+mongoose.connect(URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  // Start listening only after successfully connecting to the database
+  app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
+})
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
+});
 
 
 //viewengine
@@ -27,7 +40,7 @@ app.use(express.static('public'));
 app.use(morgan('dev'));
 
 // This middleware parses incoming URL-encoded form data and populates the req.body object with the parsed data, making it easier to handle form submissions.
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 
 //non log routes
 app.get('/', (req, res) => {
